@@ -58,6 +58,30 @@
 
             isQuestion = !isQuestion;
         }
+
+        fetch('http://localhost:3000/cards')
+  .then(res => res.json())
+  .then(data => {
+      const questionDiv = document.getElementById('question');
+      const answerDiv = document.getElementById('answer');
+
+      if (data.length > 0) {
+          questionDiv.textContent = data[0].question;
+          answerDiv.textContent = data[0].answer;
+      }
+  });
+
+  function testAdd() {
+    fetch('http://localhost:3000/cards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            question: "Test Question",
+            answer: "Test Answer"
+        })
+    });
+    testAdd();
+}
     </script>
 </body>
 </html>
