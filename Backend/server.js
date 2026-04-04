@@ -1,3 +1,17 @@
+const mysql = require('mysql2');
+
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'Passionfruit420',
+    database: 'flashcard_app'
+});
+
+db.connect(err => {
+    if (err) throw err;
+    console.log("Connected to MySQL");
+});
+
 const express = require('express');
 const cors = require('cors');
 
@@ -15,9 +29,16 @@ app.get('/cards', (req, res) => {
 
 // ADD a card
 app.post('/cards', (req, res) => {
-    const card = req.body;
-    flashcards.push(card);
-    res.json({ message: "Card added!" });
+    const { question, answer } = req.body;
+
+    db.query(
+        'INSERT INTO flashcards (question, answer) VALUES (?, ?)',
+        [question, answer],
+        (err, result) => {
+            if (err) throw err;
+            res.json({ message: "Card added" });
+        }
+    );
 });
 
 // DELETE a card

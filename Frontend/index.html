@@ -8,80 +8,144 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+            background-color: #ffffff;
+        }
+        .flashcard-container {
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #0399bb;
+            height: 300px;
         }
         .flashcard {
             width: 300px;
             height: 200px;
-            background: #fff;
+            background: #03c7ee;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s ease;
+            position: relative;
         }
-        .flashcard:hover {
-            transform: scale(1.05);
+        .flashcard.active {
+            display: flex;
         }
         .hidden {
             display: none;
         }
+        .content {
+            position: absolute;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #03c7ee;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0294b5;
+        }
     </style>
 </head>
 <body>
-    <div class="flashcard" onclick="flipCard()">
-        <div id="question">What is the capital of France?</div>
-        <div id="answer" class="hidden">Paris</div>
+    <div class="flashcard-container">
+        <div class="flashcard active" onclick="flipCard(this)">
+            <div class="content" id="question-1">What is the capital of France?</div>
+            <div class="content hidden" id="answer-1">Paris</div>
+        </div>
+        <div class="flashcard" onclick="flipCard(this)">
+            <div class="content" id="question-2">What is 2 + 2?</div>
+            <div class="content hidden" id="answer-2">4</div>
+        </div>
+        <div class="flashcard" onclick="flipCard(this)">
+            <div class="content" id="question-3">What is the largest planet?</div>
+            <div class="content hidden" id="answer-3">Jupiter</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevFlashcard()">Previous</button>
+        <button onclick="nextFlashcard()">Next</button>
+        <button onclick="addFlashcard()">Add</button>
+        <button onclick="deleteFlashcard()">Delete</button>
     </div>
 
     <script>
-        let isQuestion = true;
+        let currentFlashcardIndex = 0;
+        const flashcards = document.querySelectorAll('.flashcard');
 
-        function flipCard() {
-            const question = document.getElementById('question');
-            const answer = document.getElementById('answer');
+        function flipCard(card) {
+            const question = card.querySelector('.content:not(.hidden)');
+            const answer = card.querySelector('.content.hidden');
 
-            if (isQuestion) {
-                question.classList.add('hidden');
-                answer.classList.remove('hidden');
-            } else {
-                question.classList.remove('hidden');
-                answer.classList.add('hidden');
-            }
-
-            isQuestion = !isQuestion;
+            question.classList.add('hidden');
+            answer.classList.remove('hidden');
         }
 
-        fetch('http://localhost:3000/cards')
-  .then(res => res.json())
-  .then(data => {
-      const questionDiv = document.getElementById('question');
-      const answerDiv = document.getElementById('answer');
+        function showFlashcard(index) {
+            flashcards.forEach((card, i) => {
+                card.classList.remove('active');
+                if (i === index) {
+                    card.classList.add('active');
+                }
+            });
+        }
 
-      if (data.length > 0) {
-          questionDiv.textContent = data[0].question;
-          answerDiv.textContent = data[0].answer;
-      }
-  });
+        function nextFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
+            showFlashcard(currentFlashcardIndex);
+        }
 
-  function testAdd() {
-    fetch('http://localhost:3000/cards', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            question: "Test Question",
-            answer: "Test Answer"
-        })
-    });
-    testAdd();
-}
+        function prevFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length;
+            showFlashcard(currentFlashcardIndex);
+        }
+
+        function addFlashcard() {
+            const question = prompt("Enter the question:");
+            const answer = prompt("Enter the answer:");
+            if (question && answer) {
+                const newFlashcard = document.createElement('div');
+                newFlashcard.className = 'flashcard';
+                newFlashcard.setAttribute('onclick', 'flipCard(this)');
+                newFlashcard.innerHTML = `
+                    <div class="content">${question}</div>
+                    <div class="content hidden">${answer}</div>
+                `;
+                document.querySelector('.flashcard-container').appendChild(newFlashcard);
+                flashcards[currentFlashcardIndex].classList.remove('active');
+                currentFlashcardIndex = flashcards.length;
+                newFlashcard.classList.add('active');
+            }
+        }
+
+        function deleteFlashcard() {
+            if (flashcards.length > 0) {
+                const currentFlashcard = flashcards[currentFlashcardIndex];
+                currentFlashcard.remove();
+                currentFlashcardIndex = Math.max(0, currentFlashcardIndex - 1);
+                showFlashcard(currentFlashcardIndex);
+            } else {
+                alert("No flashcards to delete!");
+            }
+        }
+
+        showFlashcard(currentFlashcardIndex);
     </script>
+
 </body>
 </html>
