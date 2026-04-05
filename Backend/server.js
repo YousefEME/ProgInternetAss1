@@ -1,4 +1,10 @@
+const express = require('express');
+const cors = require('cors');
 const mysql = require('mysql2');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -12,40 +18,40 @@ db.connect(err => {
     console.log("Connected to MySQL");
 });
 
-const express = require('express');
-const cors = require('cors');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Temporary storage (we’ll replace with database later)
-let flashcards = [];
-
-// GET all cards
+// GET
 app.get('/cards', (req, res) => {
-    res.json(flashcards);
+    db.query('SELECT * FROM flashcards', (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
 });
 
-// ADD a card
+// POST
 app.post('/cards', (req, res) => {
     const { question, answer } = req.body;
 
     db.query(
         'INSERT INTO flashcards (question, answer) VALUES (?, ?)',
         [question, answer],
-        (err, result) => {
+        (err) => {
             if (err) throw err;
             res.json({ message: "Card added" });
         }
     );
 });
 
-// DELETE a card
-app.delete('/cards/:index', (req, res) => {
-    const index = req.params.index;
-    flashcards.splice(index, 1);
-    res.json({ message: "Card deleted!" });
+// DELETE
+app.delete('/cards/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.query(
+        'DELETE FROM flashcards WHERE id = ?',
+        [id],
+        (err) => {
+            if (err) throw err;
+            res.json({ message: "Deleted" });
+        }
+    );
 });
 
 app.listen(3000, () => {
