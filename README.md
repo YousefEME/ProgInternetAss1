@@ -3,11 +3,13 @@
 1. Start the backend:
    cd Backend
    node server.js
+   go into .env file and put in your own password to connect the MySQL. 
 
-2. Open the frontend:
+3. Open the frontend:
    Open index.html in browser
 
-3. Ensure MySQL is running with the flashcard_app database
+4. Ensure MySQL is running with the flashcard_app database
+   
 
 Checklist
 ----------------------------------------------------------------------------------------------------
