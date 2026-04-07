@@ -3,7 +3,8 @@
 1. Start the backend:
    cd Backend
    node server.js
-   go into .env file and put in your own password to connect the MySQL. 
+   go into .env file and put in your own root password to connect the MySQL.
+   If you cannot remember your password plesae use mysql -u root -p
 
 3. Open the frontend:
    Open index.html in browser
