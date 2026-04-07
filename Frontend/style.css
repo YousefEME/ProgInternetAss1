@@ -1,4 +1,5 @@
-.h1, .title, .subtitle {
+.h1, .title, .subtitle { /* the title and slogan centered in the middle, the yellow text is to represent the "flash" in the name CardFlash */
+
     text-align: center;
     padding: 5px;
     margin: 0;
@@ -12,13 +13,13 @@
     color: rgb(255, 255, 255);
 }
 
-img[alt="Cardflash Logo"] {
-    width: 50px; /* Increase the size of the logo */
-    position: absolute; /* Position it in the corner */
-    top: 10px; /* Adjust the top position */
-    left: 10px; /* Adjust the left position */
-    padding: 0; /* Remove extra padding */
-    margin: 0; /* Remove extra margin */
+img[alt="Cardflash Logo"] { /* logo in the top left corner i created in piskel, representing a flashcard and a lightning bolt  */
+    width: 50px; 
+    position: absolute; 
+    top: 10px;
+    left: 10px; 
+    padding: 0; 
+    margin: 0; 
 }
 
 
@@ -30,23 +31,6 @@ body {
     color: white;
 }
 
-/* HEADER */
-.header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.logo {
-    font-size: 32px;
-}
-
-h1 {
-    margin: 0;
-}
-
-/* ADD CARD BOX */
 .add-flashcard {
     background: rgb(255, 255, 255);
     padding: 20px;

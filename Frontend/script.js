@@ -1,4 +1,5 @@
 let currentFlashcardIndex = 0;
+let usedCardIds = new Set();
 
 function flipCard(card) {
     const question = card.querySelector('.content:not(.hidden)');
@@ -36,8 +37,13 @@ function nextFlashcard() {
 
     if (cards.length <= 1) return;
 
-    // Remove current card from UI ONLY
-    cards[currentFlashcardIndex].remove();
+    const currentCard = cards[currentFlashcardIndex];
+    const id = currentCard.dataset.id;
+
+    // mark as used
+    usedCardIds.add(Number(id));
+
+    currentCard.remove();
 
     const remainingCards = document.querySelectorAll('.flashcard');
 
@@ -47,7 +53,6 @@ function nextFlashcard() {
     }
 
     currentFlashcardIndex = currentFlashcardIndex % remainingCards.length;
-
     remainingCards[currentFlashcardIndex].classList.add('active');
 
     updateCounter(remainingCards.length);
@@ -104,8 +109,9 @@ function loadCards() {
         .then(data => {
             const container = document.getElementById('container');
             container.innerHTML = "";
+            const filtered = data.filter(card => !usedCardIds.has(card.id));
 
-            data.forEach((card, index) => {
+            filtered.forEach((card, index) => {
                 const div = document.createElement('div');
                 div.className = 'flashcard';
                 div.dataset.id = card.id;
@@ -122,7 +128,7 @@ function loadCards() {
             });
 
             currentFlashcardIndex = 0;
-            updateCounter(data.length);
+            updateCounter(filtered.length);
         });
 }
 
