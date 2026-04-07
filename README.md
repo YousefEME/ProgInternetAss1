@@ -1,3 +1,17 @@
+## How to Run
+
+1. Start the backend:
+   cd Backend
+   node server.js
+
+2. Open the frontend:
+   Open index.html in browser
+
+3. Ensure MySQL is running with the flashcard_app database
+
+Checklist
+----------------------------------------------------------------------------------------------------
+
 1. Project:
 CardFlash, the Flashcard app ready to use in a flash!
 
@@ -20,4 +34,7 @@ CardFlash was created with HTML, CSS and JavaScript for the frontend, Node.js fo
 There are two folders, Frontend and Backend. Frontend contains the HTML, CSS and Javascript files. The backend contains the server.js file, package.json, package-lock.json and node_modules. 
 
 6. Challenges faced:
-There were numerous challenges faced when creating this project, the first and most apparent one being synchronising the frontend and backend. 
+There were numerous challenges faced when creating this project, the first and most apparent one being synchronising the frontend and backend. Initially the flashcards were simply hardcoded into the html, however I needed to make it dynamic, so by using fetch() in javascript to send requests to node.js which storesand retrieves the flashcards from the MySQL databse. 
+
+I also had trouble making the card disappear after clicking the Next button, as it would be deleted from the database as well. I also needed to make sure the counter was working properly and I wanted the logic to work so that if there is only one flashcard available, pressing the next button would not delete the flashcard. 
+
