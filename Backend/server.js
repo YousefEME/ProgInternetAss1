@@ -1,4 +1,3 @@
-// make sure to do: npm install dotenv 
 require('dotenv').config();
 
 const express = require('express');
