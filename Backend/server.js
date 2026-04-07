@@ -1,3 +1,6 @@
+// make sure to do: npm install dotenv 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
@@ -16,7 +19,10 @@ const db = mysql.createConnection({
 
 // Connect to MySQL
 db.connect(err => {
-    if (err) throw err;
+    if (err) {
+        console.error("Database connection failed:", err.message);
+        return;
+    }
     console.log("Connected to MySQL");
 });
 
@@ -40,6 +46,7 @@ app.post('/cards', (req, res) => {
             res.json({ message: "Card added" });
         }
     );
+
 });
 
 // DELETE
