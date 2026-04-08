@@ -1,7 +1,7 @@
 ## How to Run
 
 1. Start the backend:
-   cd Backend
+   cd Backend,
    node server.js
    go into .env file and put in your own root password to connect the MySQL.
    If you cannot remember your password plesae use mysql -u root -p
